@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DirectionsService } from './directions.service';
 import { CreateDirectionDto } from './dto/create-direction.dto';
@@ -22,8 +23,8 @@ export class DirectionsController {
   }
 
   @Get('directions')
-  findAll(): Promise<Direction[]> {
-    return this.directionsService.findAll();
+  findAll(@Query('faculty') faculty?: string): Promise<Direction[]> {
+    return this.directionsService.findAll(faculty);
   }
 
   @Get('directions/:id')

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -22,8 +23,11 @@ export class JobsController {
   }
 
   @Get()
-  findAll(): Promise<Job[]> {
-    return this.jobsService.findAll();
+  findAll(
+    @Query('skills') skills?: string,
+    @Query('faculty') faculty?: string,
+  ): Promise<Job[]> {
+    return this.jobsService.findAll(skills, faculty);
   }
 
   @Get(':id')

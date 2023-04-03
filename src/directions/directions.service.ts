@@ -22,7 +22,12 @@ export class DirectionsService {
     return res;
   }
 
-  async findAll(): Promise<Direction[]> {
+  async findAll(faculty?: string): Promise<Direction[]> {
+    if (faculty) {
+      const search = faculty.replace('+', ' ').split('-');
+      return await this.directionModel.find({ faculty: { $all: search } });
+    }
+
     return await this.directionModel.find();
   }
 
