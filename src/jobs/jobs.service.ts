@@ -24,25 +24,25 @@ export class JobsService {
     return res;
   }
 
-  async findAll(skills?: string, faculty?: string): Promise<Job[]> {
+  async findAll(skills?: string, faculty?: string, limit = 5): Promise<Job[]> {
     // Cpp-Python-Создание+сайтов-Философия-Java
-    // if (skills) {
-    //   const search = skills.replace('+', ' ').replace('Cpp', 'C++').split('-');
-    //   return await this.jobModel.find({ skills: { $all: search } });
-    // }
+    let ids;
     if (faculty) {
       const res = await this.directionService.findAll(faculty);
-      const ids = new Set();
+      ids = new Set();
       res.forEach((item) => {
         const idJobs = item.idJobs;
         for (let i = 0; i < idJobs.length; i++) {
           ids.add(idJobs[i]);
         }
       });
-      return await this.jobModel.find({ id: { $all: Array.from(ids) } });
     }
 
-    return await this.jobModel.find();
+    const findQuery = {
+      ...(skills && { skills: { $all: skills.replace('+', ' ').replace('Cpp', 'C++').split('-'); } }),
+      ...(ids && { id: { $in: Array.from(ids) } }),
+    };
+    return await this.jobModel.find(findQuery).limit(limit);
   }
 
   async findOne(id: number): Promise<Job> {

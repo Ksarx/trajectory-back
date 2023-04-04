@@ -26,8 +26,9 @@ export class JobsController {
   findAll(
     @Query('skills') skills?: string,
     @Query('faculty') faculty?: string,
+    @Query('limit') limit = 5,
   ): Promise<Job[]> {
-    return this.jobsService.findAll(skills, faculty);
+    return this.jobsService.findAll(skills, faculty, limit);
   }
 
   @Get(':id')
