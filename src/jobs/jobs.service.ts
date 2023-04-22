@@ -39,7 +39,11 @@ export class JobsService {
     }
 
     const findQuery = {
-      ...(skills && { skills: { $all: skills.replace('+', ' ').replace('Cpp', 'C++').split('-'); } }),
+      ...(skills && {
+        skills: {
+          $all: skills.replace('+', ' ').replace('Cpp', 'C++').split('-'),
+        },
+      }),
       ...(ids && { id: { $in: Array.from(ids) } }),
     };
     return await this.jobModel.find(findQuery).limit(limit);
