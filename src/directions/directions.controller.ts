@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DirectionsService } from './directions.service';
 import { CreateDirectionDto } from './dto/create-direction.dto';
@@ -21,9 +22,24 @@ export class DirectionsController {
     return this.directionsService.create(createDirectionDto);
   }
 
-  @Get('directions')
-  findAll(): Promise<Direction[]> {
-    return this.directionsService.findAll();
+  // @Get('directions')
+  // findAll(@Query('faculty') faculty?: string): Promise<Direction[]> {
+  //   return this.directionsService.findAll(faculty);
+  // }
+
+  @Get('jobs/:id/directions')
+  async getDirections(
+    @Param('id') id: string,
+    @Query('faculty') faculty: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 6,
+  ): Promise<any> {
+    return this.directionsService.getDirections(+id, faculty, page, limit);
+  }
+
+  @Get('jobs/:id/directions/all')
+  async getAllDirections(@Param('id') id: string): Promise<any> {
+    return this.directionsService.getAllDirections(+id);
   }
 
   @Get('directions/:id')
@@ -31,10 +47,10 @@ export class DirectionsController {
     return this.directionsService.findOne(+id);
   }
 
-  @Get('jobs/:id/directions')
-  findJobDirections(@Param('id') id: string): Promise<Direction[]> {
-    return this.directionsService.findJobDirections(+id);
-  }
+  // @Get('jobs/:id/directions')
+  // findJobDirections(@Param('id') id: string): Promise<Direction[]> {
+  //   return this.directionsService.findJobDirections(+id);
+  // }
 
   @Patch('directions/:id')
   update(

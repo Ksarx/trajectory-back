@@ -10,5 +10,6 @@ import { DirectionSchema } from './schemas/direction.schema';
   ],
   controllers: [DirectionsController],
   providers: [DirectionsService],
+  exports: [DirectionsService],
 })
 export class DirectionsModule {}

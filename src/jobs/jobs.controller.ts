@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -22,8 +23,17 @@ export class JobsController {
   }
 
   @Get()
-  findAll(): Promise<Job[]> {
-    return this.jobsService.findAll();
+  async getJobs(
+    @Query('field') field = 'Все профессии',
+    @Query('page') page = 1,
+    @Query('limit') limit = 6,
+  ): Promise<any> {
+    return this.jobsService.getJobs(field, page, limit);
+  }
+
+  @Get('/all')
+  async getAllJobs(): Promise<any> {
+    return this.jobsService.getAllJobs();
   }
 
   @Get(':id')

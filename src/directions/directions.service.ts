@@ -22,9 +22,58 @@ export class DirectionsService {
     return res;
   }
 
-  async findAll(): Promise<Direction[]> {
-    return await this.directionModel.find();
+  async getDirections(
+    idJob: number,
+    faculty: string,
+    page = 1,
+    limit = 6,
+  ): Promise<any> {
+    let query;
+    if (faculty) {
+      query = faculty.split('-');
+    }
+    const skip = (page - 1) * limit;
+    const totalDocs = await this.directionModel.countDocuments(
+      query ? { faculty: query, idJobs: idJob } : { idJobs: idJob },
+    );
+    const totalPages = Math.ceil(totalDocs / limit);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
+    const nextPage = hasNextPage ? page + 1 : null;
+    const prevPage = hasPrevPage ? page - 1 : null;
+    const docs = await this.directionModel
+      .find(query ? { faculty: query, idJobs: idJob } : { idJobs: idJob })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    return {
+      items: docs,
+      meta: {
+        totalDocs,
+        limit,
+        page,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        nextPage,
+        prevPage,
+      },
+    };
   }
+
+  async getAllDirections(idJob: number): Promise<any> {
+    return await this.directionModel.find({ idJobs: idJob });
+  }
+
+  // async findAll(faculty?: string): Promise<Direction[]> {
+  //   if (faculty) {
+  //     const search = faculty.replace('+', ' ').split('-');
+  //     return await this.directionModel.find({ faculty: { $all: search } });
+  //   }
+
+  //   return await this.directionModel.find();
+  // }
 
   async findOne(id: number): Promise<Direction> {
     const direction = await this.directionModel.findOne({ id });
@@ -36,15 +85,15 @@ export class DirectionsService {
     return direction;
   }
 
-  async findJobDirections(idJob: number): Promise<Direction[]> {
-    const directions = await this.directionModel.find({ idJobs: idJob });
+  // async findJobDirections(idJob: number): Promise<Direction[]> {
+  //   const directions = await this.directionModel.find({ idJobs: idJob });
 
-    if (!directions) {
-      throw new NotFoundException('Directions not found.');
-    }
+  //   if (!directions) {
+  //     throw new NotFoundException('Directions not found.');
+  //   }
 
-    return directions;
-  }
+  //   return directions;
+  // }
 
   async update(
     directionId: number,
