@@ -14,8 +14,8 @@ export class Job {
   @Prop([String])
   skills: string[];
 
-  @Prop([String])
-  fields: string[];
+  @Prop()
+  field: string;
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);

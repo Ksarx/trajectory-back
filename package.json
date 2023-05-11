@@ -26,8 +26,10 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/platform-express": "^9.0.0",
+    "@types/mongoose-paginate": "^5.0.12",
     "dotenv": "^16.0.3",
     "mongoose": "^6.10.2",
+    "mongoose-paginate-v2": "^1.7.1",
     "node-fetch": "^3.3.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"

@@ -18,6 +18,9 @@ export class Direction {
   faculty: string;
 
   @Prop()
+  profile: string;
+
+  @Prop()
   description: string;
 
   @Prop([Number])

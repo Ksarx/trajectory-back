@@ -23,12 +23,17 @@ export class JobsController {
   }
 
   @Get()
-  findAll(
-    @Query('skills') skills?: string,
-    @Query('faculty') faculty?: string,
-    @Query('limit') limit = 5,
-  ): Promise<Job[]> {
-    return this.jobsService.findAll(skills, faculty, limit);
+  async getJobs(
+    @Query('field') field = 'Все профессии',
+    @Query('page') page = 1,
+    @Query('limit') limit = 6,
+  ): Promise<any> {
+    return this.jobsService.getJobs(field, page, limit);
+  }
+
+  @Get('/all')
+  async getAllJobs(): Promise<any> {
+    return this.jobsService.getAllJobs();
   }
 
   @Get(':id')
